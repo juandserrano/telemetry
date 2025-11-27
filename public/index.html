@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telemetry Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Live Telemetry</h1>
+            <div class="status-indicator" id="connectionStatus">
+                <span class="dot"></span>
+                <span class="text">Disconnected</span>
+            </div>
+        </header>
+
+        <main>
+            <div class="card">
+                <div class="chart-header">
+                    <h2>Telemetry History</h2>
+                    <div class="controls" id="metricControls">
+                        <div class="control-group" draggable="true" data-chart="chart-percent">
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="cpuToggle" checked>
+                                <span class="checkmark cpu"></span> CPU (%)
+                            </label>
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="ramToggle" checked>
+                                <span class="checkmark ram"></span> RAM (%)
+                            </label>
+                        </div>
+                        <div class="control-group" draggable="true" data-chart="chart-power">
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="powerToggle" checked>
+                                <span class="checkmark power"></span> Power (W)
+                            </label>
+                        </div>
+                        <div class="control-group" draggable="true" data-chart="chart-temp">
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="tempToggle" checked>
+                                <span class="checkmark temp"></span> Temp (°C)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="charts-container">
+                    <div class="chart-wrapper">
+                        <h3>Percentage (%)</h3>
+                        <div id="chart-percent" class="chart"></div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <h3>Power (W)</h3>
+                        <div id="chart-power" class="chart"></div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <h3>Temperature (°C)</h3>
+                        <div id="chart-temp" class="chart"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card data-log">
+                <h2>Recent Data</h2>
+                <ul id="dataList"></ul>
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,342 @@
+:root {
+    --bg-color: #0f172a;
+    --card-bg: #1e293b;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --accent-color: #38bdf8;
+    --success-color: #4ade80;
+    --error-color: #f87171;
+    --border-color: #334155;
+    --font-family: 'Outfit', sans-serif;
+
+    /* Metric Colors */
+    --color-cpu: #38bdf8;
+    --color-ram: #a78bfa;
+    --color-power: #fbbf24;
+    --color-temp: #f87171;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+h1 {
+    font-weight: 600;
+    font-size: 2rem;
+    background: linear-gradient(to right, var(--accent-color), #818cf8);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    background: var(--card-bg);
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+    border: 1px solid var(--border-color);
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--error-color);
+    transition: background-color 0.3s ease;
+}
+
+.status-indicator.connected .dot {
+    background-color: var(--success-color);
+}
+
+.status-indicator.connected .text {
+    color: var(--success-color);
+}
+
+main {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    gap: 2rem;
+}
+
+.card {
+    background-color: var(--card-bg);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+h2 {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    font-weight: 400;
+    margin: 0;
+}
+
+.controls {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.control-group {
+    display: flex;
+    gap: 1rem;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    background-color: rgba(255, 255, 255, 0.05);
+    cursor: grab;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.control-group:active {
+    cursor: grabbing;
+}
+
+.control-group.dragging {
+    opacity: 0.5;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-size: 0.875rem;
+    user-select: none;
+}
+
+.checkbox-container input {
+    display: none;
+}
+
+.checkmark {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    background-color: var(--card-bg);
+    border: 2px solid var(--text-secondary);
+    transition: all 0.2s;
+}
+
+.checkbox-container input:checked~.checkmark.cpu {
+    background-color: var(--color-cpu);
+    border-color: var(--color-cpu);
+}
+
+.checkbox-container input:checked~.checkmark.ram {
+    background-color: var(--color-ram);
+    border-color: var(--color-ram);
+}
+
+.checkbox-container input:checked~.checkmark.power {
+    background-color: var(--color-power);
+    border-color: var(--color-power);
+}
+
+.checkbox-container input:checked~.checkmark.temp {
+    background-color: var(--color-temp);
+    border-color: var(--color-temp);
+}
+
+.charts-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.chart-wrapper h3 {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.chart {
+    width: 100%;
+    height: 250px;
+    /* Reduced height for multiple charts */
+    position: relative;
+    overflow: hidden;
+}
+
+/* D3 Chart Styles */
+.line {
+    fill: none;
+    stroke-width: 2px;
+    transition: opacity 0.3s;
+}
+
+.line.cpu {
+    stroke: var(--color-cpu);
+    filter: drop-shadow(0 0 4px rgba(56, 189, 248, 0.3));
+}
+
+.line.ram {
+    stroke: var(--color-ram);
+    filter: drop-shadow(0 0 4px rgba(167, 139, 250, 0.3));
+}
+
+.line.power {
+    stroke: var(--color-power);
+    filter: drop-shadow(0 0 4px rgba(251, 191, 36, 0.3));
+}
+
+.line.temp {
+    stroke: var(--color-temp);
+    filter: drop-shadow(0 0 4px rgba(248, 113, 113, 0.3));
+}
+
+.axis text {
+    fill: var(--text-secondary);
+    font-size: 12px;
+    font-family: var(--font-family);
+}
+
+.axis path,
+.axis line {
+    stroke: var(--border-color);
+}
+
+.grid line {
+    stroke: var(--border-color);
+    stroke-opacity: 0.3;
+}
+
+/* Tooltip Styles */
+.tooltip {
+    position: absolute;
+    background-color: rgba(15, 23, 42, 0.95);
+    border: 1px solid var(--border-color);
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    pointer-events: none;
+    font-size: 0.875rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+    z-index: 100;
+    transition: opacity 0.2s;
+    opacity: 0;
+}
+
+.tooltip .time {
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    margin-bottom: 0.25rem;
+}
+
+.tooltip .value {
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.focus-dot {
+    fill: var(--bg-color);
+    stroke-width: 2px;
+    r: 5;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Data Log Styles */
+.data-log {
+    max-height: 800px;
+    /* Increased height */
+    overflow-y: auto;
+}
+
+#dataList {
+    list-style: none;
+}
+
+#dataList li {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    animation: fadeIn 0.3s ease-in;
+}
+
+#dataList li .time {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+#dataList li .metrics {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.25rem;
+}
+
+#dataList li .metric {
+    display: flex;
+    justify-content: space-between;
+}
+
+#dataList li .metric span {
+    font-family: monospace;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    main {
+        grid-template-columns: 1fr;
+    }
+}
