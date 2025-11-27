@@ -336,7 +336,66 @@ h2 {
 }
 
 @media (max-width: 768px) {
+    body {
+        padding: 1rem;
+    }
+
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .status-indicator {
+        width: 100%;
+        justify-content: center;
+    }
+
     main {
         grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .chart-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .controls {
+        flex-wrap: wrap;
+        width: 100%;
+    }
+
+    .control-group {
+        flex: 1 1 auto;
+        justify-content: center;
+        padding: 0.75rem; /* Larger touch target */
+    }
+
+    .checkbox-container {
+        padding: 0.25rem 0; /* Larger touch target */
+    }
+
+    .chart {
+        height: 200px; /* Slightly shorter on mobile to fit more content */
+    }
+    
+    .data-log {
+        max-height: 400px; /* Limit height on mobile */
+    }
+
+    #dataList li .metrics {
+        grid-template-columns: 1fr 1fr; /* Keep 2 columns but ensure fit */
+        gap: 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    .control-group {
+        width: 100%; /* Full width controls on very small screens */
     }
 }

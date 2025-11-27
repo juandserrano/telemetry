@@ -236,17 +236,36 @@ class TelemetryChart {
 
   resize() {
     this.width = this.container.clientWidth - this.margin.left - this.margin.right;
-    d3.select(`#${this.containerId} svg`).attr('width', this.width + this.margin.left + this.margin.right);
+    this.height = this.container.clientHeight - this.margin.top - this.margin.bottom; // Recalculate height
+
+    // Update SVG dimensions
+    d3.select(`#${this.containerId} svg`)
+      .attr('width', this.width + this.margin.left + this.margin.right)
+      .attr('height', this.height + this.margin.top + this.margin.bottom);
+
+    // Update Scales
     this.x.range([0, this.width]);
+    this.y.range([this.height, 0]);
 
-    this.svg.select(`#clip-${this.containerId} rect`).attr("width", this.width);
+    // Update Clip Path
+    this.svg.select(`#clip-${this.containerId} rect`)
+      .attr("width", this.width)
+      .attr("height", this.height);
 
+    // Update Zoom
     this.zoom.translateExtent([[0, 0], [this.width, this.height]])
       .extent([[0, 0], [this.width, this.height]]);
 
-    this.svg.select("rect").attr("width", this.width);
+    // Update Overlay
+    this.svg.select("rect")
+      .attr("width", this.width)
+      .attr("height", this.height);
 
+    // Update Axes and Grid
+    this.xAxis.attr('transform', `translate(0,${this.height})`);
+    this.yAxis.call(d3.axisLeft(this.y));
     this.yGrid.call(d3.axisLeft(this.y).tickSize(-this.width).tickFormat(''));
+
     this.update();
   }
 }
